@@ -39,6 +39,13 @@ public class Custodian implements Serializable{
 	}
 	
 
+	public Custodian(String custodianid) {
+		super();
+	    this.custodianid=custodianid;
+		this.custodianname = "";
+		this.password = "";
+	}
+
 	public String getCustodianid() {
 		return custodianid;
 	}
