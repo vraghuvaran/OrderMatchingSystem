@@ -10,6 +10,6 @@ import com.dbs.ordermatching.models.SellInstrument;
 
 public interface SellInstrumentRepository extends JpaRepository<SellInstrument, String>{
 
-	List<SellInstrument> findAllByClientid(String clientid);
+	List<SellInstrument> findAllByClientid(Client clientid);
 
 }

@@ -33,7 +33,11 @@ public class Client {
 		
 	}
  
-	
+	public Client(String clientid) {
+		
+		this.clientid = clientid;
+		
+	}
 	
 	
 	public Client(String clientid, String clientname, Custodian custodianid, BigDecimal transactionlimit,

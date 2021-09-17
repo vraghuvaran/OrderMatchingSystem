@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dbs.ordermatching.models.BuyInstrument;
 import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Result;
+import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.services.BuySellInstrumentService;
 
 @RestController
-@RequestMapping("/buyinstruments")
+@RequestMapping("/sellinstruments")
 @CrossOrigin
-public class BuyInstrumentsController {
-	
+public class SellInstrumentsController {
+
 	@Autowired
 	private BuySellInstrumentService buysellinstrumentservice;
 	
@@ -31,13 +32,13 @@ public class BuyInstrumentsController {
 		
 		Result result = new Result();
 		try {
-			List<BuyInstrument> list = this.buysellinstrumentservice.loadBuyInstrumentsByClientId(new Client(clientid));
+			List<SellInstrument> list = this.buysellinstrumentservice.loadSellInstrumentsByClientId(new Client(clientid));
 			result.setStatus(true);
-			result.setMessage("BuyInstruments found.");
+			result.setMessage("SellInstruments found.");
 			result.data = list;
 			return ResponseEntity.status(HttpStatus.OK).body(result);	
 		}catch (EntityNotFoundException e) {
-			System.out.println("BuyInstruments not found error");
+			System.out.println("SellInstruments not found error");
 			result.setStatus(false);
 			result.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -51,9 +52,5 @@ public class BuyInstrumentsController {
 		}
 		
 	}
-	
-	
-	
-	
 	
 }
