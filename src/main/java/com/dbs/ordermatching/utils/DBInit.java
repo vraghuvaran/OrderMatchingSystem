@@ -305,5 +305,6 @@ public class DBInit {
 			+ "        }\r\n"
 			+ "    ]\r\n"
 			+ "";
+	
 	public static boolean BUILD_DB = true;
 }

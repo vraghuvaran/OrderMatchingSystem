@@ -64,12 +64,12 @@ public class DBInitRestController {
 			/**
 			 *  Instrument table
 			 */
+			
 			List<Instrument> instruments = Arrays.asList(mapper.readValue(DBInit.INSTRUMENTSJSON, Instrument[].class));
 			instrumentRepo.saveAll(instruments);
 			for (Instrument instrument : instruments) {
 				System.out.println(instrument);
 			}
-			
 			
 		}
 	}

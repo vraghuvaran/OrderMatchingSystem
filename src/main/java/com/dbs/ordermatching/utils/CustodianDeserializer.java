@@ -20,7 +20,7 @@ public class CustodianDeserializer extends StdDeserializer<Custodian> {
     @Override
     public Custodian deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        
+    	
     	JsonNode custodianNode = jp.getCodec().readTree(jp);
         
         System.out.println(custodianNode.toString().replace("\"", ""));
