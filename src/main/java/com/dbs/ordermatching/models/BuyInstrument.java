@@ -1,6 +1,7 @@
 package com.dbs.ordermatching.models;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.dbs.ordermatching.utils.MyGenerator;
 
@@ -37,14 +41,15 @@ public class BuyInstrument {
 	
 	public Boolean isactive;
 	
-	public LocalDate createdate;
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date createdate;
 
 	public BuyInstrument() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public BuyInstrument(Client clientid, Instrument instrumentid, double price, double quantity,
-			Boolean isactive, LocalDate createdate) {
+			Boolean isactive, Date createdate) {
 		super();
 	
 		this.clientid = clientid;
@@ -95,11 +100,11 @@ public class BuyInstrument {
 		this.isactive = isactive;
 	}
 
-	public LocalDate getCreatedate() {
+	public Date getCreatedate() {
 		return createdate;
 	}
 
-	public void setCreatedate(LocalDate createdate) {
+	public void setCreatedate(Date createdate) {
 		this.createdate = createdate;
 	}
 
