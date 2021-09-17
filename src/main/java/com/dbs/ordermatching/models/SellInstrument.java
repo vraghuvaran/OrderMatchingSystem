@@ -19,7 +19,7 @@ public class SellInstrument {
 	@Id
 	@GeneratedValue(generator = MyGenerator.generatorName)
     @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.dbs.ordermatching.utils.MyGenerator")
-	public Integer id;
+	public String id;
     
     @ManyToOne
     @JoinColumn(name="clientid")
