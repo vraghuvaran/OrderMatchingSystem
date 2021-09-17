@@ -5,17 +5,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Service
 public class JWTUtil {
 
-	private String SECRET_KEY = "secret";
+	@Value("${jwt.secret}")
+	private String SECRET_KEY;
+	
+	@Value("${jwt.expirationDateInMs}")
+	private int jwtExpirationInMs;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -38,11 +49,23 @@ public class JWTUtil {
     }
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
     public Boolean validateToken(String token, UserDetails userDetails) {
+       try {
+    	   
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        
+       }catch(SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+    	   
+    	   throw new BadCredentialsException("INVALID_CREDENTIALS",e);
+    	   
+       }catch(ExpiredJwtException e) {
+    	   
+    	   throw e;
+    	   
+       }
     }
 }
