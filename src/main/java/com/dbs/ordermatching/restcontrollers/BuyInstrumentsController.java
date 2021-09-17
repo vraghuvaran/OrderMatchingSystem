@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,6 +53,28 @@ public class BuyInstrumentsController {
 		}
 		
 	}
+	
+	
+	@PostMapping
+	public ResponseEntity<Result> saveBuyInstrument(@RequestBody BuyInstrument buyinstrument) {
+		
+		Result result = new Result();
+		try {
+			this.buysellinstrumentservice.updateBuyInstrument(buyinstrument);
+			result.setStatus(true);
+			result.setMessage("BuyInstrument saved successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(result);	
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			result.setStatus(false);
+			result.setMessage(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(result);
+		}
+		
+	}
+	
+	
 	
 	
 	
