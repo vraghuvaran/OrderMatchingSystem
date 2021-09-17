@@ -12,20 +12,20 @@ public class AuthenticationRequest {
 	}
 
 
-	public AuthenticationRequest(String username, String password) {
+	public AuthenticationRequest(String custodianid, String password) {
 		super();
-		this.custodianid = username;
+		this.custodianid = custodianid;
 		this.password = password;
 	}
 
 
-	public String getUsername() {
+	public String getCustodianid() {
 		return custodianid;
 	}
 
 
-	public void setUsername(String username) {
-		this.custodianid = username;
+	public void setCustodianid(String custodianid) {
+		this.custodianid = custodianid;
 	}
 
 
@@ -41,8 +41,9 @@ public class AuthenticationRequest {
 
 	@Override
 	public String toString() {
-		return "AuthenticationRequest [username=" + custodianid + ", password=" + password + "]";
+		return "AuthenticationRequest [custodianid=" + custodianid + ", password=" + password + "]";
 	}
-	
+
+
     
 }

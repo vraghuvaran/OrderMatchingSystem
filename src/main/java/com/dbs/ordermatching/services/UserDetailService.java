@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.dbs.ordermatching.models.Custodian;
+import com.dbs.ordermatching.models.MyUserDetails;
 import com.dbs.ordermatching.repositories.UserRepository;
 
 
@@ -23,11 +24,11 @@ public class UserDetailService implements UserDetailsService{
 		// TODO Auto-generated method stub
 		Optional<Custodian> opt = this.userrepo.findByCustodianid(custodianid);
 		
+//		System.out.println("custodian id"+custodianid);
 		
         opt.orElseThrow(()->new UsernameNotFoundException("NOT FOUND "+custodianid));
 		
-//		return opt.map(MyUserDetails::new).get();
-        return null;
+		return opt.map(MyUserDetails::new).get();
 		
 	}
 	
