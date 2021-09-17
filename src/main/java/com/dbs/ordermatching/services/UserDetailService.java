@@ -26,7 +26,8 @@ public class UserDetailService implements UserDetailsService{
 		
         opt.orElseThrow(()->new UsernameNotFoundException("NOT FOUND "+custodianid));
 		
-		return opt.map(MyUserDetails::new).get();
+//		return opt.map(MyUserDetails::new).get();
+        return null;
 		
 	}
 	
