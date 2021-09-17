@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Null;
+
+import com.dbs.ordermatching.utils.LocalDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 public class Instrument {
@@ -15,10 +19,12 @@ public class Instrument {
 	@Column(unique = true)
 	private String instrumentname;
 	
+	@Column(nullable = true)
 	private double facevalue;
 	
 	private double minquanity;
 	
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
 	private LocalDate expiry;
 	
 	public Instrument() {
@@ -34,6 +40,7 @@ public class Instrument {
 		this.minquanity = minquanity;
 		this.expiry = expiry;
 	}
+	
 
 	public String getInstrumentid() {
 		return instrumentid;
