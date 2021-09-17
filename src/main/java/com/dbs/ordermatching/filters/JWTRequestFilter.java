@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.dbs.ordermatching.services.UserDetailService;
 import com.dbs.ordermatching.utils.JWTUtil;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 
 
@@ -35,7 +38,7 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		 
+	try {
 		final String authorizationHeader = request.getHeader("Authorization");
 		
 		String custodianid = null;
@@ -59,7 +62,15 @@ public class JWTRequestFilter extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}
+	}catch(ExpiredJwtException e) {
 		
+		request.setAttribute("Exception", e);
+		
+	}catch(BadCredentialsException e) {
+		request.setAttribute("Exception", e);
+	}catch(Exception e) {
+		System.out.println(e);
+	}
 //		System.out.println("hello");
 		filterChain.doFilter(request,response);
 		
