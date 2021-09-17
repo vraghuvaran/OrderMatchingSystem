@@ -15,7 +15,6 @@ public class InstrumentService {
 	
 	public Instrument loadBuyInstrumentById(String  instrumentId) {
 		try {
-			
 			Optional<Instrument> cust = this.instructionRepo.findById(instrumentId);
 			return cust.orElseThrow(()->{	
 				return new EntityNotFoundException("Instrument with  "+instrumentId+ " does not exist");

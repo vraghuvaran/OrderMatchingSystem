@@ -14,13 +14,8 @@ import com.dbs.ordermatching.repositories.CustodianRepository;
 @SpringBootApplication
 public class OrderMatchingApplication {
 	
-	
-
 	public static void main(String[] args) {
 		SpringApplication.run(OrderMatchingApplication.class, args);
-		
-		
-		
 	}
 	
 //	@Autowired
