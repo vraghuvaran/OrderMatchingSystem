@@ -21,6 +21,7 @@ public interface BuyInstrumentRepository extends JpaRepository<BuyInstrument, St
 	@Query("select u from BuyInstrument u where u.clientid != :clientid and u.price = :price and u.instrumentid =:instrumentid and u.isactive =true order by u.createdate asc")
 	public List<BuyInstrument> findBuyInstrumentToTrade(Client clientid,double  price, Instrument instrumentid);
 	
+	
 
 	@Query("select u from SellInstrument u where u.clientid != :clientid and u.price = :price and u.instrumentid =:instrumentid and u.isactive =true order by u.createdate asc")
 	public List<SellInstrument> findSellInstrumentToTrade(Client clientid,double  price, Instrument instrumentid);
