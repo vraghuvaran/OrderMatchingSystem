@@ -40,19 +40,19 @@ public class OrderMatchingApplication {
 	@Autowired
 	private CustodianRepository repo1;
 	
-	@PostConstruct
-	public void initialize() {
-		System.out.println("initialize");
-		List<Custodian> accs = Stream.of(
-				new Custodian("raghuvaran", "Bank of America",encoder().encode("raghuvaran") ),
-				new Custodian("raghuvaran1", "Bank of China", encoder().encode("raghuvaran1")),
-				new Custodian("raghuvaran2", "Canadian Bank",encoder().encode("raghuvaran2")),
-				new Custodian("raghuvaran3","The Swiss Group", encoder().encode("raghuvaran3")),
-				new Custodian("raghuvaran5","State Bank of india", encoder().encode("password"))).collect(Collectors.toList());
-
-		repo1.saveAll(accs);
-
-	}
+//	@PostConstruct
+//	public void initialize() {
+//		System.out.println("initialize");
+//		List<Custodian> accs = Stream.of(
+//				new Custodian("raghuvaran", "Bank of America",encoder().encode("raghuvaran") ),
+//				new Custodian("raghuvaran1", "Bank of China", encoder().encode("raghuvaran1")),
+//				new Custodian("raghuvaran2", "Canadian Bank",encoder().encode("raghuvaran2")),
+//				new Custodian("raghuvaran3","The Swiss Group", encoder().encode("raghuvaran3")),
+//				new Custodian("raghuvaran5","State Bank of india", encoder().encode("password"))).collect(Collectors.toList());
+//
+//		repo1.saveAll(accs);
+//
+//	}
 	
 	@Bean
 	public PasswordEncoder encoder()
