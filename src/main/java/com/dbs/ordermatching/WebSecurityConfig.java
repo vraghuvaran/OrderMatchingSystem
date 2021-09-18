@@ -2,6 +2,7 @@ package com.dbs.ordermatching;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,6 +29,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 name="api",
 type = SecuritySchemeType.HTTP, 
 in = SecuritySchemeIn.HEADER)
+@Order(1000)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired

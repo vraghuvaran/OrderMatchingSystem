@@ -36,12 +36,14 @@ public class CustodianController {
 		
 		String custodianid = null;
 		
+		
 		String jwt = null;
 		
 		if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")) {
 			jwt = authorizationHeader.substring(7);
-			
+			System.out.println("JWT: "+jwt);
 			custodianid= jwtutil.extractUsername(jwt);
+			
 		}
 		Optional<Custodian> opt = userrepository.findByCustodianid(custodianid);
 		
