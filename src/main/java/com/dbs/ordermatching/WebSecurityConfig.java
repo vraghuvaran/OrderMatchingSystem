@@ -21,6 +21,7 @@ import com.dbs.ordermatching.services.UserDetailService;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 
@@ -29,7 +30,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 name="api",
 type = SecuritySchemeType.HTTP, 
 in = SecuritySchemeIn.HEADER)
-@Order(1000)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
@@ -47,9 +47,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			"/configuration/security",
 			"/swagger-ui.html",
 			"/webjars/**",
-			"/swagger-ui/**",
+			// -- Swagger UI v3 (OpenAPI)
 			"/v3/api-docs/**",
 			"/swagger-ui/**",
+// -- Swagger UI v2
+//			"/v2/api-docs",
+//			"/swagger-resources",
+//			"/swagger-resources/**",
+//			"/configuration/ui",
+//			"/configuration/security",
+//			"/swagger-ui.html",
+//			"/webjars/**",
+//			"/swagger-ui/**",
+//			"/v3/api-docs/**",
+//			"/swagger-ui/**",
 			"/","/init"
 			
 	};
@@ -70,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		http.cors();
 		http.csrf().disable().authorizeRequests()
-		.antMatchers(HttpMethod.GET,AUTH_WHITELIST).permitAll()
+		.antMatchers(HttpMethod.GET,AUTH_WHITELIST)
+		.anonymous()
 		.antMatchers(HttpMethod.POST,"/authenticate").permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement()

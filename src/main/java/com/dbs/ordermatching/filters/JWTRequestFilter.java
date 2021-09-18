@@ -47,7 +47,6 @@ public class JWTRequestFilter extends OncePerRequestFilter{
 		
 		String jwt = null;
 		
-		System.out.println("authorizationHeader "+authorizationHeader);
 		if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")) {
 			jwt = authorizationHeader.substring(7);
 			custodianid= jwtutil.extractUsername(jwt);

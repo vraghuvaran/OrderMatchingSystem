@@ -18,9 +18,13 @@ import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.repositories.UserRepository;
 import com.dbs.ordermatching.utils.JWTUtil;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/custodian")
 @CrossOrigin
+@SecurityRequirement(name ="api")
+
 public class CustodianController {
 
 	@Autowired

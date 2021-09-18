@@ -20,9 +20,13 @@ import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.services.BuySellInstrumentService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/buyinstruments")
 @CrossOrigin
+@SecurityRequirement(name ="api")
+
 public class BuyInstrumentsController {
 	
 	@Autowired

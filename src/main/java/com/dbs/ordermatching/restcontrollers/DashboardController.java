@@ -20,9 +20,13 @@ import com.dbs.ordermatching.services.ClientService;
 import com.dbs.ordermatching.services.LastTradeHistoryService;
 import com.dbs.ordermatching.services.TradeHistoryService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/dashboard")
 @CrossOrigin
+@SecurityRequirement(name ="api")
+
 public class DashboardController {
 	@Autowired
 	private TradeHistoryService tradeHistoryService;

@@ -19,10 +19,14 @@ import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.services.TradeHistoryService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping("/trade-history")
 @CrossOrigin
+@SecurityRequirement(name ="api")
+
 public class TradeHistoryController {
 	
 	@Autowired

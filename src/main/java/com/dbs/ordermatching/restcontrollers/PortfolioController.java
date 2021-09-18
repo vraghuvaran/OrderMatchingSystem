@@ -22,9 +22,13 @@ import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.services.BuySellInstrumentService;
 import com.dbs.ordermatching.services.ClientService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/portfolio")
 @CrossOrigin
+@SecurityRequirement(name ="api")
+
 public class PortfolioController {
 	
 	@Autowired

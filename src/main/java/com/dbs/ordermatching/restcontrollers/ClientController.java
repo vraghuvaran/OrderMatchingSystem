@@ -18,10 +18,13 @@ import com.dbs.ordermatching.models.Custodian;
 import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.services.ClientService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping("/client")
 @CrossOrigin
+@SecurityRequirement(name ="api")
 public class ClientController {
 
 		@Autowired

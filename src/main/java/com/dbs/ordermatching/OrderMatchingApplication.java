@@ -29,11 +29,9 @@ import com.dbs.ordermatching.repositories.SellInstrumentRepository;
 import com.dbs.ordermatching.repositories.TradeHistoryRepository;
 import com.dbs.ordermatching.restcontrollers.CustodianController;
 
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
-@EnableSwagger2
 public class OrderMatchingApplication {
 	
 	public static void main(String[] args) {
