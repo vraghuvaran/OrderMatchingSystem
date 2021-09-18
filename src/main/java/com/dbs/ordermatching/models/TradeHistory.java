@@ -1,12 +1,15 @@
 package com.dbs.ordermatching.models;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -44,14 +47,15 @@ public class TradeHistory {
 	
 	private double quantity;
 	
-	private LocalDate createdat;
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date createdat;
 	
     public TradeHistory() {
     	
     }
 
 	public TradeHistory(Custodian sendercustodianid, Custodian receivercustodianid, Client senderclientid,
-			Client receiverclientid, Instrument instrumentid, double price, double quantity, LocalDate createdat) {
+			Client receiverclientid, Instrument instrumentid, double price, double quantity, Date createdat) {
 		super();
 		this.sendercustodianid = sendercustodianid;
 		this.receivercustodianid = receivercustodianid;
@@ -130,11 +134,11 @@ public class TradeHistory {
 		this.quantity = quantity;
 	}
 
-	public LocalDate getCreatedat() {
+	public Date getCreatedat() {
 		return createdat;
 	}
 
-	public void setCreatedat(LocalDate createdat) {
+	public void setCreatedat(Date createdat) {
 		this.createdat = createdat;
 	}
 

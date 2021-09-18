@@ -14,7 +14,7 @@ public class TradeHistoryService {
 	
 	public List<TradeHistory>  loadAllTradeHistoryById(String custodianId ) throws IllegalArgumentException{
 		try {
-			return  this.tradeHistoryRepo.findAllBySendercustodianidOrReceivercustodianid2(custodianId,custodianId);
+			return  this.tradeHistoryRepo.findAllBySendercustodianidOrReceivercustodianid(custodianId,custodianId);
 		}catch(IllegalArgumentException e )
 		{
 			System.out.println(e.getMessage());

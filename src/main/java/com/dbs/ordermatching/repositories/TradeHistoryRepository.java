@@ -10,9 +10,9 @@ import com.dbs.ordermatching.models.TradeHistory;
 
 public interface TradeHistoryRepository extends JpaRepository<TradeHistory, String>{
 
-	List<TradeHistory> findAllBySendercustodianidOrReceivercustodianid(String sendercustodianid,String receivercustodianid);
+//	List<TradeHistory> findAllBySendercustodianidOrReceivercustodianid(String sendercustodianid,String receivercustodianid);
 	 
-	@Query("select * from trade_history u where u.sendercustodianid = :sendercustodianid or u.receivercustodianid = :receivercustodianid")
-	  List<TradeHistory> findAllBySendercustodianidOrReceivercustodianid2(@Param("sendercustodianid") String sendercustodianid,
+	@Query("select u from TradeHistory u where u.sendercustodianid = :sendercustodianid or u.receivercustodianid = :receivercustodianid")
+	  List<TradeHistory> findAllBySendercustodianidOrReceivercustodianid(@Param("sendercustodianid") String sendercustodianid,
 	                                 @Param("receivercustodianid") String receivercustodianid);
 }

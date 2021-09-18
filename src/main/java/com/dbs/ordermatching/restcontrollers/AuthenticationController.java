@@ -24,6 +24,7 @@ import com.dbs.ordermatching.utils.JWTUtil;
 @CrossOrigin
 public class AuthenticationController {
 	
+	
 	@Autowired
 	private AuthenticationManager authenticationmanager;
 	
