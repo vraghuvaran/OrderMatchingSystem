@@ -79,7 +79,7 @@ public class OrderMatchingApplication {
 	private LastTradeHistoryRepository lastTradeRepo;
 	
 	
-	
+/**	
 	@Bean
 	public void insertBuyData() {
 		
@@ -107,26 +107,8 @@ public class OrderMatchingApplication {
 	    lastTradeRepo.save(new LastTradeHistory(buyerCust.getCustodianid(), trade, new Date()));
 
 	    lastTradeRepo.save(new LastTradeHistory(sellerCust.getCustodianid(), trade, new Date()));
-//	    tradeHistoryRepo.save(new TradeHistory(new Custodian("CS001"), new Custodian("CS001"), new Client("DBS002"), new Client("DBS001"), new Instrument("I001"), 100, 50, new Date()));
 			
 	}
-	
-	@Autowired
-	private CustodianRepository repo;
-	
-	
-//	@Bean
-//	public void insertProductData()
-//	{
-//		
-//        Custodian cust = new Custodian("american_bank","");
-//
-//        Custodian cust1 = new Custodian("americannn_bank","");
-//
-//		repo.save(cust);
-//		repo.save(cust1);
-//		
-//		
-//	}
+*/
 
 }
