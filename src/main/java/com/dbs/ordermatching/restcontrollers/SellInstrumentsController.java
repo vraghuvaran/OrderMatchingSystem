@@ -1,5 +1,6 @@
 package com.dbs.ordermatching.restcontrollers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +21,8 @@ import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.services.BuySellInstrumentService;
+import com.dbs.ordermatching.services.ClientService;
+import com.dbs.ordermatching.services.TradeHistoryService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -32,7 +35,11 @@ public class SellInstrumentsController {
 
 	@Autowired
 	private BuySellInstrumentService buysellinstrumentservice;
-	
+	@Autowired
+	private TradeHistoryService tradeHistoryService;
+	@Autowired
+	private ClientService clientService;
+
 	@GetMapping("/getall/{clientid}")
 	public ResponseEntity<Result> findBuysByClientId(@PathVariable String clientid) {
 		
@@ -65,7 +72,20 @@ public class SellInstrumentsController {
 		
 		Result result = new Result();
 		try {
-			this.buysellinstrumentservice.updateSellInstrument(sellinstrument);
+			
+			Client client = sellinstrument.clientid;
+			BigDecimal totalTransaction = new  BigDecimal(sellinstrument.getPrice()*sellinstrument.getQuantity());
+			if(client.getTransactionlimit().compareTo(totalTransaction)==-1) {
+				throw new Exception("Insufficient Transaction Limit");
+			}
+			
+			String sellinstrumentId = this.buysellinstrumentservice.updateSellInstrument(sellinstrument);
+			
+			System.out.println(sellinstrumentId);
+			this.tradeHistoryService.tradematchingEngine(buyinstrumentId, true);
+
+			
+			
 			result.setStatus(true);
 			result.setMessage("SellInstrument saved successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(result);	

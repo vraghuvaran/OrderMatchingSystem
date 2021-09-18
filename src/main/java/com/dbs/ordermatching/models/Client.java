@@ -27,7 +27,7 @@ public class Client {
 	
 	private BigDecimal transactionlimit;
 //	
-	private double balance;
+	private BigDecimal balance;
 	
 	public Client() {
 		
@@ -41,7 +41,7 @@ public class Client {
 	
 	
 	public Client(String clientid, String clientname, Custodian custodianid, BigDecimal transactionlimit,
-			double balance) {
+			BigDecimal balance) {
 		super();
 		this.clientid = clientid;
 		this.clientname = clientname;
@@ -101,13 +101,13 @@ public class Client {
 
 
 
-	public double getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
 
 
-	public void setBalance(double balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 

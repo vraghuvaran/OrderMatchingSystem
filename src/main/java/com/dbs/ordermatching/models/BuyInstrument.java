@@ -107,6 +107,16 @@ public class BuyInstrument {
 	public void setCreatedate(Date createdate) {
 		this.createdate = createdate;
 	}
+	
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString() {

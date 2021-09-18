@@ -108,6 +108,15 @@ public class SellInstrument {
 		this.createdate = createdate;
 	}
 
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "SellInstrument [id=" + id + ", clientid=" + clientid + ", instrumentid=" + instrumentid + ", price="
