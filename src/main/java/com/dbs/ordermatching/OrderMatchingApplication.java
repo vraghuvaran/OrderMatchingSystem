@@ -13,10 +13,12 @@ import com.dbs.ordermatching.models.BuyInstrument;
 import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Custodian;
 import com.dbs.ordermatching.models.Instrument;
+import com.dbs.ordermatching.models.LastTradeHistory;
 import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.repositories.BuyInstrumentRepository;
 import com.dbs.ordermatching.repositories.CustodianRepository;
+import com.dbs.ordermatching.repositories.LastTradeHistoryRepository;
 import com.dbs.ordermatching.repositories.SellInstrumentRepository;
 import com.dbs.ordermatching.repositories.TradeHistoryRepository;
 
@@ -36,6 +38,12 @@ public class OrderMatchingApplication {
 	@Autowired 
 	private TradeHistoryRepository tradeHistoryRepo;
 	
+	
+	@Autowired 
+	private LastTradeHistoryRepository lastTradeRepo;
+	
+	
+	
 	@Bean
 	public void insertBuyData() {
 		
@@ -52,13 +60,17 @@ public class OrderMatchingApplication {
 	    		100,100,true,new Date());
 	    srepo.save(sell);
 	    
-	    tradeHistoryRepo.save(new TradeHistory(
+	    TradeHistory trade = new TradeHistory(
 	    		sellerCust, buyerCust, 
 	    		sellerClient, buyerClient, 
 	    		instrument, 
 	    		buy.getPrice(), buy.getQuantity(), 
-	    		new Date()));
-		
+	    		new Date());
+	    tradeHistoryRepo.save(trade);
+
+	    lastTradeRepo.save(new LastTradeHistory(buyerCust.getCustodianid(), trade, new Date()));
+
+	    lastTradeRepo.save(new LastTradeHistory(sellerCust.getCustodianid(), trade, new Date()));
 //	    tradeHistoryRepo.save(new TradeHistory(new Custodian("CS001"), new Custodian("CS001"), new Client("DBS002"), new Client("DBS001"), new Instrument("I001"), 100, 50, new Date()));
 			
 	}

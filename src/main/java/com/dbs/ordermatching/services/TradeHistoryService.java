@@ -56,5 +56,24 @@ public class TradeHistoryService {
 		return true;
 	}
 	
+	public long fetchCountofBuyTradesById(Custodian custodianId ) throws IllegalArgumentException{
+		try {
+			return  this.tradeHistoryRepo.countBySendercustodianid(custodianId);
+		}catch(IllegalArgumentException e )
+		{
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+	public long fetchCountofSellTradesById(Custodian custodianId ) throws IllegalArgumentException{
+		try {
+			return  this.tradeHistoryRepo.countByReceivercustodianid(custodianId);
+		}catch(IllegalArgumentException e )
+		{
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+	
 	
 }

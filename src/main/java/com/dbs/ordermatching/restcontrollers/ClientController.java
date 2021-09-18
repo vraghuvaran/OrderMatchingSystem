@@ -30,7 +30,7 @@ public class ClientController {
 		
 		
 		@GetMapping("/{clientid}")
-		public ResponseEntity<Result> findClientById(@PathVariable String clientid) {
+		public ResponseEntity<Result> findClientById(   @PathVariable String clientid) {
 			Result result = new Result();
 			try { 
 				Client client = this.clientService.findClientById(clientid);
