@@ -15,4 +15,8 @@ public interface TradeHistoryRepository extends JpaRepository<TradeHistory, Stri
 	@Query("select u from TradeHistory u where u.sendercustodianid = :sendercustodianid or u.receivercustodianid = :receivercustodianid")
 	  List<TradeHistory> findAllBySendercustodianidOrReceivercustodianid(@Param("sendercustodianid") Custodian sendercustodianid,
 	                                 @Param("receivercustodianid") Custodian receivercustodianid);
+	
+	 long countBySendercustodianid(Custodian custodianid);
+	 
+	 long countByReceivercustodianid(Custodian custodianid);
 }

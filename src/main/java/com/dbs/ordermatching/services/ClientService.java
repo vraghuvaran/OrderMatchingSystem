@@ -43,6 +43,16 @@ public class ClientService {
 		}
 	}
 	
+	public long fetchCountofClientById(Custodian custodianId ) throws IllegalArgumentException{
+		try {
+			return  this.clientRepo.countByCustodianid(custodianId);
+		}catch(IllegalArgumentException e )
+		{
+			System.out.println(e.getMessage());
+			throw e;
+		}
+	}
+	
 	
 
 }

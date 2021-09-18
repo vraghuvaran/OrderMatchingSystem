@@ -9,6 +9,7 @@ import com.dbs.ordermatching.models.Custodian;
 
 public interface ClientRepository extends JpaRepository<Client, String>{
 
-	List<Client> findAllByCustodianid(Custodian custodianId);
+	List<Client> findAllByCustodianid(Custodian custodianid);
 	
+	 long countByCustodianid(Custodian custodianid);
 }
