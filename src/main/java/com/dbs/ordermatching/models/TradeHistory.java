@@ -62,6 +62,17 @@ public class TradeHistory {
 		this.quantity = quantity;
 		this.createdat = createdat;
 	}
+	
+	
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Custodian getSendercustodianid() {
 		return sendercustodianid;
