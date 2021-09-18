@@ -30,6 +30,12 @@ public class Instrument {
 	public Instrument() {
 		
 	}
+	
+	public Instrument(String instrumentid) {
+		
+		this.instrumentid=instrumentid;
+		
+	}
 
 	public Instrument(String instrumentid, String instrumentname, double facevalue, double minquanity,
 			LocalDate expiry) {
