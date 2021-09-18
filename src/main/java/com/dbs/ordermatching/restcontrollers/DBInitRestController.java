@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dbs.ordermatching.models.BuyInstrument;
 import com.dbs.ordermatching.models.Client;
+import com.dbs.ordermatching.models.ClientInstrument;
+import com.dbs.ordermatching.models.ClientInstrumentid;
 import com.dbs.ordermatching.models.ClientInstruments;
 import com.dbs.ordermatching.models.Custodian;
 import com.dbs.ordermatching.models.Instrument;
@@ -20,6 +22,7 @@ import com.dbs.ordermatching.models.LastTradeHistory;
 import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.repositories.BuyInstrumentRepository;
+import com.dbs.ordermatching.repositories.ClientInstrumentRepository;
 import com.dbs.ordermatching.repositories.ClientInstrumentsRepository;
 import com.dbs.ordermatching.repositories.ClientRepository;
 import com.dbs.ordermatching.repositories.CustodianRepository;
@@ -45,10 +48,9 @@ public class DBInitRestController {
 	
 	@Autowired
 	private ClientRepository clientRepo;
-	
+
 	@Autowired
-	private ClientInstrumentsRepository clientInstrumentsRepo;
-	
+	private ClientInstrumentsRepository clientInstrumentRepo;
 	
 	@Autowired
 	private BuyInstrumentRepository brepo;
@@ -107,14 +109,14 @@ public class DBInitRestController {
 			 * Client Instruments table
 			 */
 			List <ClientInstruments> clientInstruments = new ArrayList<>();
-			
+				
 			instruments.forEach(instrument->{
-				clientInstruments.add(new ClientInstruments(new Client("DBS001"), instrument, 100));
-				clientInstruments.add(new ClientInstruments(new Client("DBS002"), instrument, 50));
-				clientInstruments.add(new ClientInstruments(new Client("DBS005"), instrument, 100));
+				clientInstruments.add(new ClientInstruments("DBS001###"+instrument.getInstrumentid(),new Client("DBS001"), instrument, 100));
+				clientInstruments.add(new ClientInstruments("DBS002###"+instrument.getInstrumentid(),new Client("DBS002"), instrument, 50));
+				clientInstruments.add(new ClientInstruments("DBS005###"+instrument.getInstrumentid(),new Client("DBS002"), instrument, 50));
 			});
 			
-			clientInstrumentsRepo.saveAll(clientInstruments);
+			clientInstrumentRepo.saveAll(clientInstruments);
 			
 			insertData();
 			

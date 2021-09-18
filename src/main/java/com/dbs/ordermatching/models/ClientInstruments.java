@@ -17,8 +17,6 @@ import com.dbs.ordermatching.utils.MyGenerator;
 public class ClientInstruments {
 	
 	@Id
-	@GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.dbs.ordermatching.utils.MyGenerator")
 	private String id;
 	
 	@ManyToOne
@@ -35,12 +33,17 @@ public class ClientInstruments {
 		
 	}
 
-	public ClientInstruments(Client clientid, Instrument instrumentid, double quantity) {
+
+
+	public ClientInstruments(String id, Client clientid, Instrument instrumentid, double quantity) {
 		super();
+		this.id = id;
 		this.clientid = clientid;
 		this.instrumentid = instrumentid;
 		this.quantity = quantity;
 	}
+
+
 
 	public String getId() {
 		return id;
