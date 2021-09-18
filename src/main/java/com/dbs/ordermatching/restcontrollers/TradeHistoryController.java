@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.dbs.ordermatching.models.Custodian;
 import com.dbs.ordermatching.models.Result;
 import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.services.TradeHistoryService;
@@ -32,13 +32,13 @@ public class TradeHistoryController {
 	public ResponseEntity<Result> findAllClientsByCustodianId(@PathVariable String custodianId) {
 		Result result = new Result();
 		try { 
-			List<TradeHistory> tradehistory = this.tradeHistoryService.loadAllTradeHistoryById(custodianId);
+			List<TradeHistory> tradehistory = this.tradeHistoryService.loadAllTradeHistoryById(new Custodian(custodianId));
 			result.setStatus(true);
-			result.setMessage("Clients found.");
+			result.setMessage("Trades found");
 			result.data = tradehistory;
 			return ResponseEntity.status(HttpStatus.OK).body(result);			
 		}catch (EntityNotFoundException e) {
-			System.out.println("Clients not found error");
+			System.out.println("Trades not found error");
 			result.setStatus(false);
 			result.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

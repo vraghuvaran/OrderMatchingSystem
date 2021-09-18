@@ -1,5 +1,8 @@
 package com.dbs.ordermatching.restcontrollers;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dbs.ordermatching.models.BuyInstrument;
 import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Result;
+import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.services.BuySellInstrumentService;
 import com.dbs.ordermatching.services.ClientService;
 
@@ -33,17 +38,23 @@ public class PortfolioController {
 	public ResponseEntity<Result> fetchProfileData(@PathVariable String clientid,@PathVariable String custodianid) {
 		Result result = new Result();
 		try { 
-			
 			Client client = this.clientService.findClientById(clientid);
 			client.getCustodianid().setPassword("");
 			
-			
+			List<BuyInstrument> buys=  buySellService.loadBuyInstrumentsByClientId(client);
+			List<SellInstrument> sells=  buySellService.loadSellInstrumentsByClientId(client);
+ 			
 			result.setStatus(true);
-			result.setMessage("Client found");
-			result.data = client;
+			result.setMessage("Client portfolio found");
+			result.data = Map.of(
+					"client",client,
+					"buy",buys,
+					"sell",sells
+					);
+
 			return ResponseEntity.status(HttpStatus.OK).body(result);			
 		}catch (EntityNotFoundException e) {
-			System.out.println("Client not found error");
+			System.out.println("Not found error");
 			result.setStatus(false);
 			result.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

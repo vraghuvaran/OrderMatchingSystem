@@ -14,9 +14,11 @@ import com.dbs.ordermatching.models.Client;
 import com.dbs.ordermatching.models.Custodian;
 import com.dbs.ordermatching.models.Instrument;
 import com.dbs.ordermatching.models.SellInstrument;
+import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.repositories.BuyInstrumentRepository;
 import com.dbs.ordermatching.repositories.CustodianRepository;
 import com.dbs.ordermatching.repositories.SellInstrumentRepository;
+import com.dbs.ordermatching.repositories.TradeHistoryRepository;
 
 @SpringBootApplication
 public class OrderMatchingApplication {
@@ -31,16 +33,34 @@ public class OrderMatchingApplication {
 	@Autowired
 	private SellInstrumentRepository srepo;
 	
+	@Autowired 
+	private TradeHistoryRepository tradeHistoryRepo;
+	
 	@Bean
 	public void insertBuyData() {
 		
-	    brepo.save(new BuyInstrument(new Client("DBS001"),new Instrument("I001"),
-	    		100,100,true,new Date()));
+		Custodian sellerCust = new Custodian("CS002");
+		Client sellerClient = new Client("DBS005");
+		Instrument instrument = new Instrument("I001");
+		BuyInstrument buy = new BuyInstrument(sellerClient,instrument,
+	    		100,100,true,new Date());
+	    brepo.save(buy);
 	    
+	    Custodian buyerCust = new Custodian("CS001");
+	    Client buyerClient = new Client("DBS001");
+	    SellInstrument sell = new SellInstrument(buyerClient,instrument,
+	    		100,100,true,new Date());
+	    srepo.save(sell);
 	    
-	    srepo.save(new SellInstrument(new Client("DBS001"),new Instrument("I001"),
-	    		100,50,true,new Date()));
+	    tradeHistoryRepo.save(new TradeHistory(
+	    		sellerCust, buyerCust, 
+	    		sellerClient, buyerClient, 
+	    		instrument, 
+	    		buy.getPrice(), buy.getQuantity(), 
+	    		new Date()));
 		
+//	    tradeHistoryRepo.save(new TradeHistory(new Custodian("CS001"), new Custodian("CS001"), new Client("DBS002"), new Client("DBS001"), new Instrument("I001"), 100, 50, new Date()));
+			
 	}
 	
 	@Autowired
