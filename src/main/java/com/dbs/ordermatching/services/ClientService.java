@@ -33,6 +33,9 @@ public class ClientService {
 	public Client findClientById(String  clientId) throws IllegalArgumentException{
 		try {
 			Optional<Client> client = this.clientRepo.findById(clientId);
+			client.ifPresent(c->{
+				c.getCustodianid().setPassword("");
+			});
 			return client.orElseThrow(()->{	
 				return new EntityNotFoundException("Client with  "+clientId+ " does not exist");
 			});

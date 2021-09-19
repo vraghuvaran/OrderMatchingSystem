@@ -35,6 +35,7 @@ public class BuyInstrument {
     @JoinColumn(name="instrumentid")
 	public Instrument instrumentid;
 
+    
 	public double price;
 	
 	public double quantity;

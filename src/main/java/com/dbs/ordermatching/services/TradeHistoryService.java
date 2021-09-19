@@ -1,6 +1,7 @@
 package com.dbs.ordermatching.services;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.dbs.ordermatching.models.BuyInstrument;
 import com.dbs.ordermatching.models.Client;
+import com.dbs.ordermatching.models.ClientInstrument;
+import com.dbs.ordermatching.models.ClientInstruments;
 import com.dbs.ordermatching.models.Custodian;
+import com.dbs.ordermatching.models.Instrument;
 import com.dbs.ordermatching.models.SellInstrument;
 import com.dbs.ordermatching.models.TradeHistory;
 import com.dbs.ordermatching.repositories.BuyInstrumentRepository;
@@ -26,8 +30,12 @@ public class TradeHistoryService {
 	private BuySellInstrumentService buySellInstrumentService;
 	@Autowired
 	private BuyInstrumentRepository buySellInstrumentRepo;
-	
-	
+
+	@Autowired
+	private ClientService clientService;
+
+	@Autowired
+	private ClientInstrumentService clientInstrumentService;
 
 	public List<TradeHistory> loadAllTradeHistoryById(Custodian custodianId) throws IllegalArgumentException {
 		try {
@@ -80,32 +88,128 @@ public class TradeHistoryService {
 		}
 	}
 
-	public void tradematchingEngine(String id, boolean isBuy) throws Exception {
-		
-			if (isBuy) {
-				BuyInstrument buyInstrument = buySellInstrumentService.loadBuyInstrumentById(id);
-				Client client = buyInstrument.clientid;
-				BigDecimal totalTransaction = new  BigDecimal(buyInstrument.getPrice()*buyInstrument.getQuantity());
-				if(client.getBalance().compareTo(totalTransaction)==-1) {
-					throw new Exception("Insufficient Transaction Limit");
-				}
-			SellInstrument sellInstrument= 	buySellInstrumentRepo.findSellInstrumentToTrade(client, buyInstrument.getPrice() ,buyInstrument.getInstrumentid() ).get(0);
-				
-			System.out.println(sellInstrument);
+	public void tradematchingEngine(String id, boolean isBuyRequest) throws Exception {
+
+		if (isBuyRequest) {
+			BuyInstrument buyInstrument = buySellInstrumentService.loadBuyInstrumentById(id);
+			Client buyerclient = clientService.findClientById(buyInstrument.clientid.getClientid());
+			BigDecimal totalTransaction = new BigDecimal(buyInstrument.getPrice() * buyInstrument.getQuantity());
+
+			ClientInstruments buyerClientInstruments = clientInstrumentService
+					.loadClientInstrumersByCliesntIdAndInstrumentId(buyerclient, buyInstrument.getInstrumentid());
+			
+			if (buyerclient.getBalance().compareTo(totalTransaction) == -1) {
+				throw new Exception("Insufficient transaction limit");
+			}
+
+			if (buyerclient.getTransactionlimit().compareTo(totalTransaction) == -1) {
+				throw new Exception("Trade exceeds your Maximum transaction limit");
+			}
+
+			List<SellInstrument> sellInstruments = buySellInstrumentRepo.findSellInstrumentToTrade(buyerclient,
+					buyInstrument.getPrice(), buyInstrument.getInstrumentid());
+
+			if (sellInstruments == null || sellInstruments.isEmpty()) {
+				System.out.println("No Match found");
+				throw new Exception("No Match dound partially active for now");
 			} else {
-				BuyInstrument sellInstrument = buySellInstrumentService.loadBuyInstrumentById(id);
-				Client client = sellInstrument.clientid;
-				BigDecimal totalTransaction = new  BigDecimal(sellInstrument.getPrice()*sellInstrument.getQuantity());
-				if(client.getBalance().compareTo(totalTransaction)==-1) {
-					throw new Exception("Insufficient Transaction Limit");
-				}
-			BuyInstrument buyInstrument= 	buySellInstrumentRepo.findBuyInstrumentToTrade(client, sellInstrument.getPrice() ,sellInstrument.getInstrumentid() ).get(0);
-				
-			System.out.println(buyInstrument);
+				System.out.println("Match found");
+				Client sellerClient = sellInstruments.get(0).clientid;
+				SellInstrument sellInstrument = sellInstruments.get(0);
+				ClientInstruments sellerClientInstruments = clientInstrumentService
+						.loadClientInstrumersByCliesntIdAndInstrumentId(sellerClient, buyInstrument.getInstrumentid());
+
+				double totalTradeQuantityDone = onTradeMatchFound(buyInstrument, sellInstrument);
+
+				// changing client instruments/stocks
+				buyerClientInstruments.setQuantity(buyerClientInstruments.getQuantity() + buyInstrument.getQuantity());
+				sellerClientInstruments
+						.setQuantity(sellerClientInstruments.getQuantity() - buyInstrument.getQuantity());
+				onTradeSaveAllToDB(buyInstrument, buyerclient, buyerClientInstruments, sellerClient, sellInstrument,
+						sellerClientInstruments, totalTradeQuantityDone);
 
 			}
 
-		
+		} else {
+			BuyInstrument sellInstrument = buySellInstrumentService.loadBuyInstrumentById(id);
+			Client sellerclient =  clientService.findClientById(sellInstrument.clientid.getClientid());
+			ClientInstruments sellerclientInstrument = clientInstrumentService.loadClientInstrumersByCliesntIdAndInstrumentId(sellerclient, sellInstrument.getInstrumentid());
+			
+			if (sellerclientInstrument.getQuantity() < sellInstrument.getQuantity()) {
+				throw new Exception("Insufficient instrument quantity");
+			}
+			BigDecimal totalTransaction = new BigDecimal(sellInstrument.getPrice() * sellInstrument.getQuantity());
+			if (sellerclient.getBalance().compareTo(totalTransaction) == -1) {
+				throw new Exception("Insufficient Transaction Limit");
+			}
+			BuyInstrument buyInstrument = buySellInstrumentRepo
+					.findBuyInstrumentToTrade(sellerclient, sellInstrument.getPrice(), sellInstrument.getInstrumentid())
+					.get(0);
+			System.out.println(buyInstrument);
+		}
+
+	}
+
+	/**
+	 * Handles all updates to DB after trade
+	 * 
+	 * @param buyInstrument
+	 * @param buyerclient
+	 * @param buyerClientInstruments
+	 * @param sellerClient
+	 * @param sellInstrument
+	 * @param sellerClientInstruments
+	 * @throws IllegalArgumentException
+	 */
+	private void onTradeSaveAllToDB(BuyInstrument buyInstrument, Client buyerclient,
+			ClientInstruments buyerClientInstruments, Client sellerClient, SellInstrument sellInstrument,
+			ClientInstruments sellerClientInstruments, double tradeQuantity) throws IllegalArgumentException {
+		buySellInstrumentService.updateSellInstrument(sellInstrument);
+		buySellInstrumentService.updateBuyInstrument(buyInstrument);
+
+		clientInstrumentService.updateClientInstrumenets(buyerClientInstruments);
+		clientInstrumentService.updateClientInstrumenets(sellerClientInstruments);
+
+		TradeHistory trade = new TradeHistory(sellerClient.getCustodianid(), buyerclient.getCustodianid(), sellerClient,
+				buyerclient, buyInstrument.instrumentid, buyInstrument.getPrice(), tradeQuantity, new Date());
+		tradeHistoryRepo.save(trade);
+	}
+
+	/**
+	 * Handles business logic of deductions from ClientInstruments and Buy/Sell
+	 * Instruments
+	 * 
+	 * @param buyInstrument
+	 * @param sellInstrument
+	 * @return total trade
+	 */
+	private double onTradeMatchFound(BuyInstrument buyInstrument, SellInstrument sellInstrument) {
+		double totalTradeQuantityDone = 0;
+		if (sellInstrument.quantity > buyInstrument.getQuantity()) {
+
+			totalTradeQuantityDone = buyInstrument.getQuantity();
+			// client Buy/Sell Instruments
+			sellInstrument.setQuantity(sellInstrument.getQuantity() - buyInstrument.getQuantity());
+			buyInstrument.setQuantity(0);
+			buyInstrument.setIsactive(false);
+
+//					s,b
+//					50,10
+//					10,50
+		} else if (sellInstrument.quantity < buyInstrument.getQuantity()) {
+
+			totalTradeQuantityDone = sellInstrument.getQuantity();
+			buyInstrument.setQuantity(buyInstrument.getQuantity() - sellInstrument.getQuantity());
+			sellInstrument.setQuantity(0);
+			sellInstrument.setIsactive(false);
+		} else if (sellInstrument.quantity == buyInstrument.getQuantity()) {
+			totalTradeQuantityDone = buyInstrument.getQuantity();
+			buyInstrument.setQuantity(0);
+			sellInstrument.setQuantity(0);
+			sellInstrument.setIsactive(false);
+			buyInstrument.setIsactive(false);
+		}
+		return totalTradeQuantityDone;
 	}
 
 }
