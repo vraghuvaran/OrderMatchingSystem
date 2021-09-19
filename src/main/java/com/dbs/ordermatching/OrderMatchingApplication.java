@@ -46,11 +46,5 @@ public class OrderMatchingApplication {
 	@Autowired
 	private TradeHistoryRepository repo ;
 	
-	@Bean
-	public void runpro() {
-		String sellid = repo.TRADEMATCH_ALGO(1, "093086e10e6240c8b6fea498e20cd15c");
-		System.out.println(sellid);
-	}
-
 	
 }
